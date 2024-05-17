@@ -1,11 +1,12 @@
-const addition = (a: number, b: number): number => {
-    return a + b;
-};
+import express from 'express';
 
-const number1: number = 5;
-const number2: number = 10;
-const result: number = addition(number1, number2);
+const app = express();
+const PORT = 3000;
 
-console.log(`The application name is "${process.env.APP_NAME}"`);
+app.get('/', (req, res) => {
+    res.send('Hello, TypeScript with Express!');
+});
 
-console.log('The result is %d', result);
+app.listen(PORT, () => {
+    console.log(`Server is running at http://localhost:${PORT}`);
+});
