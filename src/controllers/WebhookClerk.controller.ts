@@ -54,6 +54,27 @@ function WebHookController() {
                 });
             }
 
+            if (eventType === 'user.updated') {
+                const currentUser = await prisma.user.findUnique({ where: { externalUserId: payload.data.id } });
+                if (!currentUser) {
+                    return res.status(404).json({ response: 'User not found' });
+                }
+
+                await prisma.user.updateMany({
+                    where: { externalUserId: payload.data.id },
+                    data: {
+                        imageUrl: payload.data.image_url,
+                        username: payload.data.username,
+                    },
+                });
+            }
+
+            if (eventType === 'user.deleted') {
+                await prisma.user.delete({
+                    where: { externalUserId: payload.data.id },
+                });
+            }
+
             return res.status(200).json({ response: 'Success' });
         } catch (error) {
             res.status(400).json({
